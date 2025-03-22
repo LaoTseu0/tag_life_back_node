@@ -24,6 +24,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getAllTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getAllTags');
     try {
       const tags = await tagRepository.getAllTags();
       res.json(tags);
@@ -39,6 +40,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getActiveTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getActiveTags');
     try {
       const tags = await tagRepository.getActiveTags();
       res.json(tags);

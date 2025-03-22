@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import expenseRepository from '../dal/expenseRepository';
 import { ExpenseInput } from '../types';
+import invoiceService from '../services/invoiceService';
 
 const expenseController = {
   getAllExpenses: async (req: Request, res: Response): Promise<void> => {
@@ -74,8 +75,9 @@ const expenseController = {
 
   createExpense: async (req: Request, res: Response): Promise<void> => {
     try {
-      const expenseData: ExpenseInput = req.body;
-      const newExpense = await expenseRepository.createExpense(expenseData);
+      const { expenseData, invoiceData } = req.body;
+      console.log('[ExpenseController] createExpense', expenseData, invoiceData);
+      const newExpense = await invoiceService.createInvoiceWithExpenses(invoiceData, expenseData);
       res.status(201).json(newExpense);
     } catch (error) {
       console.error('Error creating expense:', error);
