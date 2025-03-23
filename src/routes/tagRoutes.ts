@@ -1,6 +1,9 @@
 import express, { Router, RequestHandler } from 'express';
 import tagController from '../controllers/tagController';
 
+/**
+ * router: /api/tags
+ */
 const router: Router = express.Router();
 
 // Get all tags

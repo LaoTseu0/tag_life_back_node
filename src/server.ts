@@ -19,13 +19,13 @@ app.get('/', (_req, res) => {
 });
 
 // User routes
-app.use('/api/users', userRoutes);
+app.use('/api/user', userRoutes);
 
 // Expense routes
-app.use('/api/expenses', expenseRoutes);
+app.use('/api/expense', expenseRoutes);
 
 // Tag routes
-app.use('/api/tags', tagRoutes);
+app.use('/api/tag', tagRoutes);
 
 // Define the port to listen on
 const PORT = process.env.PORT || 8080;

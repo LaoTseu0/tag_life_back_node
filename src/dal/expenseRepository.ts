@@ -159,10 +159,10 @@ const expenseRepository: ExpenseRepository = {
 
   createExpense: async (expenseData: ExpenseInput): Promise<Expense> => {
     try {
-      const { montant, date, description, user_id } = expenseData;
+      const { amount, date, label, tag_id } = expenseData;
       const result = await db.query<Expense>(
-        'INSERT INTO expenses (montant, date, description, user_id) VALUES ($1, $2, $3, $4) RETURNING *',
-        [montant, date, description, user_id]
+        'INSERT INTO expenses (amount, date, label, tag_id) VALUES ($1, $2, $3, $4) RETURNING *',
+        [amount, date, label, tag_id]
       );
       return result.rows[0];
     } catch (error) {
@@ -175,11 +175,12 @@ const expenseRepository: ExpenseRepository = {
     expenseData: ExpenseInput,
     invoiceId: number
   ): Promise<Expense> => {
+    console.log('[ExpenseRepository] createExpenseForInvoiceId');
     try {
-      const { montant, date, description, user_id } = expenseData;
+      const { amount, date, label, tag_id } = expenseData;
       const result = await db.query<Expense>(
-        'INSERT INTO expenses (montant, date, description, user_id, invoice_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [montant, date, description, user_id, invoiceId]
+        'INSERT INTO expenses (amount, date, label, tag_id, invoice_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [amount, date, label, tag_id, invoiceId]
       );
       return result.rows[0];
     } catch (error) {
@@ -190,10 +191,10 @@ const expenseRepository: ExpenseRepository = {
 
   updateExpense: async (id: number, expenseData: ExpenseInput): Promise<Expense | undefined> => {
     try {
-      const { montant, date, description, user_id } = expenseData;
+      const { amount, date, label, tag_id } = expenseData;
       const result = await db.query<Expense>(
-        'UPDATE expenses SET montant = $1, date = $2, description = $3, user_id = $4 WHERE id = $5 RETURNING *',
-        [montant, date, description, user_id, id]
+        'UPDATE expenses SET amount = $1, date = $2, label = $3, tag_id = $4 WHERE id = $5 RETURNING *',
+        [amount, date, label, tag_id, id]
       );
       return result.rows[0];
     } catch (error) {

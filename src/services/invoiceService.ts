@@ -5,16 +5,13 @@ import invoiceRepository from '../dal/invoiceRepository';
 import expenseRepository from '../dal/expenseRepository';
 
 interface InvoiceService {
-  createInvoiceWithExpenses: (
-    invoiceData: InvoiceInput,
-    expenseData: ExpenseInput[]
-  ) => Promise<Invoice>;
+  createInvoiceWithExpenses: (invoiceData: InvoiceInput) => Promise<Invoice>;
 }
 
 const invoiceService: InvoiceService = {
-  createInvoiceWithExpenses: async (invoiceData: InvoiceInput, expenseData: ExpenseInput[]) => {
+  createInvoiceWithExpenses: async (invoiceData: InvoiceInput) => {
     const invoice = await invoiceRepository.createInvoice(invoiceData);
-    for (const expense of expenseData) {
+    for (const expense of invoiceData.expenses) {
       await expenseRepository.createExpenseForInvoiceId(expense, invoice.id);
     }
     return invoice;

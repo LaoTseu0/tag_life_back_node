@@ -27,9 +27,17 @@ const invoiceRepository: InvoiceRepository = {
     return result.rows[0];
   },
   createInvoice: async (invoiceData: InvoiceInput): Promise<Invoice> => {
+    console.log('[InvoiceRepository] createInvoice');
     const result = await db.query<Invoice>(
-      'INSERT INTO invoices (amount, date) VALUES ($1, $2) RETURNING *',
-      [invoiceData.amount, invoiceData.date]
+      'INSERT INTO invoices (total_amount, invoice_date, user_id, vendor_name, receipt_image_path, notes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [
+        invoiceData.total_amount,
+        invoiceData.invoice_date,
+        invoiceData.user_id,
+        invoiceData.vendor_name,
+        invoiceData.receipt_image_path,
+        invoiceData.notes,
+      ]
     );
     return result.rows[0];
   },

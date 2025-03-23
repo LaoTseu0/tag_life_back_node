@@ -56,6 +56,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getSystemTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getSystemTags');
     try {
       const tags = await tagRepository.getSystemTags();
       res.json(tags);
@@ -71,6 +72,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getTagById: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getTagById', { id: req.params.id });
     try {
       const id = parseInt(req.params.id);
       const tag = await tagRepository.getTagById(id);
@@ -91,6 +93,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getUserTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getUserTags', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const tags = await tagRepository.getUserTags(userId);
@@ -107,6 +110,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getAvailableTagsForUser: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getAvailableTagsForUser', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const tags = await tagRepository.getAvailableTagsForUser(userId);
@@ -123,6 +127,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   getUserFavoriteTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] getUserFavoriteTags', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const tags = await tagRepository.getUserFavoriteTags(userId);
@@ -139,6 +144,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   createTag: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] createTag', req.body);
     try {
       const { name, color, userId } = req.body;
       const newTag = await tagRepository.createTag(name, color, userId);
@@ -155,6 +161,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   updateTag: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] updateTag', { id: req.params.id, body: req.body });
     try {
       const id = parseInt(req.params.id);
       const { name, color, userId } = req.body;
@@ -176,6 +183,7 @@ const tagController: TagController = {
    * @param res - The response object
    */
   deactivateTag: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] deactivateTag', { id: req.params.id, userId: req.params.userId });
     try {
       const id = parseInt(req.params.id);
       const userId = parseInt(req.params.userId);
@@ -193,6 +201,10 @@ const tagController: TagController = {
    * @param res - The response object
    */
   addTagToFavorites: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] addTagToFavorites', {
+      userId: req.params.userId,
+      tagId: req.params.tagId,
+    });
     try {
       const userId = parseInt(req.params.userId);
       const tagId = parseInt(req.params.tagId);
@@ -213,6 +225,10 @@ const tagController: TagController = {
    * @param res - The response object
    */
   removeTagFromFavorites: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] removeTagFromFavorites', {
+      userId: req.params.userId,
+      tagId: req.params.tagId,
+    });
     try {
       const userId = parseInt(req.params.userId);
       const tagId = parseInt(req.params.tagId);
@@ -233,6 +249,10 @@ const tagController: TagController = {
    * @param res - The response object
    */
   isTagFavorite: async (req: Request, res: Response): Promise<void> => {
+    console.log('[TagController] isTagFavorite', {
+      userId: req.params.userId,
+      tagId: req.params.tagId,
+    });
     try {
       const userId = parseInt(req.params.userId);
       const tagId = parseInt(req.params.tagId);

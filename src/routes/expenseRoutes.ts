@@ -1,6 +1,9 @@
 import express, { Router, RequestHandler } from 'express';
 import expenseController from '../controllers/expenseController';
 
+/**
+ * router: /api/expenses
+ */
 const router: Router = express.Router();
 
 // GET all expenses

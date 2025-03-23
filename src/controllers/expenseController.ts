@@ -5,6 +5,7 @@ import invoiceService from '../services/invoiceService';
 
 const expenseController = {
   getAllExpenses: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getAllExpenses');
     try {
       const expenses = await expenseRepository.getAllExpenses();
       res.json(expenses);
@@ -15,6 +16,7 @@ const expenseController = {
   },
 
   getExpenseById: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getExpenseById', { id: req.params.id });
     try {
       const id = parseInt(req.params.id);
       const expense = await expenseRepository.getExpenseById(id);
@@ -30,6 +32,7 @@ const expenseController = {
   },
 
   getExpensesPerWeek: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getExpensesPerWeek', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const weeklyExpenses = await expenseRepository.getExpensesPerWeek(userId);
@@ -41,6 +44,7 @@ const expenseController = {
   },
 
   getExpensesPerMonth: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getExpensesPerMonth', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const monthlyExpenses = await expenseRepository.getExpensesPerMonth(userId);
@@ -52,6 +56,7 @@ const expenseController = {
   },
 
   getExpensesPerYear: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getExpensesPerYear', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const yearlyExpenses = await expenseRepository.getExpensesPerYear(userId);
@@ -63,6 +68,7 @@ const expenseController = {
   },
 
   getExpensesPerWeekWithTags: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] getExpensesPerWeekWithTags', { userId: req.params.userId });
     try {
       const userId = parseInt(req.params.userId);
       const taggedExpenses = await expenseRepository.getExpensesPerWeekByTag(userId);
@@ -75,9 +81,9 @@ const expenseController = {
 
   createExpense: async (req: Request, res: Response): Promise<void> => {
     try {
-      const { expenseData, invoiceData } = req.body;
-      console.log('[ExpenseController] createExpense', expenseData, invoiceData);
-      const newExpense = await invoiceService.createInvoiceWithExpenses(invoiceData, expenseData);
+      const invoiceData = req.body;
+      console.log('[ExpenseController] createExpense', invoiceData);
+      const newExpense = await invoiceService.createInvoiceWithExpenses(invoiceData);
       res.status(201).json(newExpense);
     } catch (error) {
       console.error('Error creating expense:', error);
@@ -86,6 +92,7 @@ const expenseController = {
   },
 
   updateExpense: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] updateExpense', { id: req.params.id, body: req.body });
     try {
       const id = parseInt(req.params.id);
       const expenseData: ExpenseInput = req.body;
@@ -102,6 +109,7 @@ const expenseController = {
   },
 
   deleteExpense: async (req: Request, res: Response): Promise<void> => {
+    console.log('[ExpenseController] deleteExpense', { id: req.params.id });
     try {
       const id = parseInt(req.params.id);
       await expenseRepository.deleteExpense(id);

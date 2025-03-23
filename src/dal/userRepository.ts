@@ -27,11 +27,12 @@ const userRepository = {
 
   // Créer un nouvel utilisateur
   createUser: async (userData: UserInput): Promise<User> => {
-    const { nom, prenom, email } = userData;
+    const { email, password_hash } = userData;
+    console.log('[UserRepository] createUser', userData);
     try {
       const result = await db.query<User>(
-        'INSERT INTO users (nom, prenom, email) VALUES ($1, $2, $3) RETURNING *',
-        [nom, prenom, email]
+        'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING *',
+        [email, password_hash]
       );
       return result.rows[0];
     } catch (error) {
@@ -42,11 +43,11 @@ const userRepository = {
 
   // Mettre à jour un utilisateur existant
   updateUser: async (id: number, userData: UserInput): Promise<User | undefined> => {
-    const { nom, prenom, email } = userData;
+    const { email, password_hash } = userData;
     try {
       const result = await db.query<User>(
-        'UPDATE users SET nom = $1, prenom = $2, email = $3 WHERE id = $4 RETURNING *',
-        [nom, prenom, email, id]
+        'UPDATE users SET email = $1, password_hash = $2 WHERE id = $3 RETURNING *',
+        [email, password_hash, id]
       );
       return result.rows[0];
     } catch (error) {

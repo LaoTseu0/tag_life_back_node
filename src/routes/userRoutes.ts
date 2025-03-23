@@ -1,6 +1,9 @@
 import express, { Router, RequestHandler } from 'express';
 import userController from '../controllers/userController';
 
+/**
+ * router: /api/users
+ */
 const router: Router = express.Router();
 
 // GET tous les utilisateurs
