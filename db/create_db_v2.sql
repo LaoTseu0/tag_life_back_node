@@ -60,21 +60,14 @@ CREATE TABLE Expenses (
     invoice_id INTEGER REFERENCES Invoices(invoice_id) ON DELETE CASCADE, -- NOUVEAU: référence à la facture
     amount DECIMAL(10,2) NOT NULL CHECK (amount > 0),
     expense_date DATE NOT NULL,
-    description VARCHAR(255),
+    label VARCHAR(255),
     default_tag_id INTEGER NOT NULL REFERENCES Tags(tag_id) ON DELETE RESTRICT,
     user_tag_id INTEGER REFERENCES Tags(tag_id) ON DELETE RESTRICT,
-    is_recurring BOOLEAN DEFAULT FALSE,
-    receipt_image_path VARCHAR(255), -- Peut être NULL si la dépense fait partie d'une facture
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     -- Contrainte: si user_tag_id est spécifié, il doit être différent de default_tag_id
     CONSTRAINT expenses_tag_coherence_check CHECK (
         user_tag_id IS NULL OR user_tag_id <> default_tag_id
-    ),
-    -- NOUVELLE CONTRAINTE: si invoice_id est spécifié, certains champs utilisent les valeurs de la facture
-    CONSTRAINT expenses_invoice_coherence_check CHECK (
-        (invoice_id IS NULL) OR 
-        (invoice_id IS NOT NULL AND receipt_image_path IS NULL)
     )
 );
 
@@ -184,8 +177,7 @@ SELECT
     e.user_id,
     e.amount,
     e.expense_date,
-    e.description,
-    e.is_recurring,
+    e.label,
     e.invoice_id, -- NOUVEAU: ID de la facture
     dt.tag_id AS display_tag_id,
     dt.name AS display_tag_name,
