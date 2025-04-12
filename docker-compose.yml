@@ -1,19 +1,17 @@
-version: "3.8"
-
 services:
   postgres:
     container_name: postgres-dev
     image: postgres:16
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: tag_life
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_tag_life:/var/lib/postgresql/data
     restart: unless-stopped
 
 volumes:
-  postgres_data:
-    name: postgres_data_volume_tag_life
+  postgres_tag_life:
+    name: pg_data_tag_life_db

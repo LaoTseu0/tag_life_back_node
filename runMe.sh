@@ -22,7 +22,7 @@ fi
 # Options du menu
 start_postgres() {
     print_message "🚀 Démarrage de PostgreSQL..."
-    docker-compose up -d
+    docker compose up -d
     if [ $? -eq 0 ]; then
         print_message "✅ PostgreSQL est maintenant disponible sur localhost:5432\n   Utilisateur: postgres\n   Base de données: dev_database"
     else

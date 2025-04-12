@@ -1,5 +1,6 @@
 import db from '../db/db';
-import { User, UserInput } from '../types';
+import { User } from '../models';
+import { UserInput } from '../types';
 
 // Fonctions pour accéder aux données des utilisateurs
 const userRepository = {
@@ -15,7 +16,7 @@ const userRepository = {
   },
 
   // Récupérer un utilisateur par son ID
-  getUserById: async (id: number): Promise<User | undefined> => {
+  getUserById: async (id: number): Promise<User> => {
     try {
       const result = await db.query<User>('SELECT * FROM users WHERE id = $1', [id]);
       return result.rows[0];
@@ -25,10 +26,24 @@ const userRepository = {
     }
   },
 
+  // Récupérer un utilisateur par son email
+  getUserByEmail: async (email: string): Promise<User> => {
+    try {
+      const result = await db.query<User>('SELECT * FROM users WHERE email = $1', [email]);
+      if (result.rows.length === 0) {
+        throw new Error('Utilisateur non trouvé');
+      }
+      return result.rows[0];
+    } catch (error) {
+      console.error(`Erreur lors de la récupération de l'utilisateur ${email}:`, error);
+      throw error;
+    }
+  },
+
   // Créer un nouvel utilisateur
-  createUser: async (userData: UserInput): Promise<User> => {
+  registerUser: async (userData: UserInput): Promise<User> => {
     const { email, password_hash } = userData;
-    console.log('[UserRepository] createUser', userData);
+    console.log('[UserRepository] registerUser', userData);
     try {
       const result = await db.query<User>(
         'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING *',
@@ -42,7 +57,7 @@ const userRepository = {
   },
 
   // Mettre à jour un utilisateur existant
-  updateUser: async (id: number, userData: UserInput): Promise<User | undefined> => {
+  updateUser: async (id: number, userData: UserInput): Promise<User> => {
     const { email, password_hash } = userData;
     try {
       const result = await db.query<User>(

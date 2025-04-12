@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import userRepository from '../dal/userRepository';
 import { UserInput } from '../types';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { User } from '../models';
 
 const userController = {
   getAllUsers: async (req: Request, res: Response): Promise<void> => {
@@ -30,11 +33,35 @@ const userController = {
     }
   },
 
-  createUser: async (req: Request, res: Response): Promise<void> => {
-    console.log('[UserController] createUser', req.body);
+  login: async (req: Request, res: Response): Promise<void> => {
+    console.log('[UserController] login', req.body);
+    try {
+      const { email, password } = req.body;
+      const user: User = await userRepository.getUserByEmail(email);
+      if (!user) {
+        res.status(401).json({ error: 'Authentification échouée' });
+        return;
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      if (!isPasswordValid) {
+        res.status(401).json({ error: 'Authentification échouée' });
+        return;
+      }
+      const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET!, {
+        expiresIn: '1h',
+      });
+      res.json({ token });
+    } catch (error) {
+      console.error('Erreur lors de la connexion:', error);
+      res.status(500).json({ error: 'Erreur serveur' });
+    }
+  },
+
+  registerUser: async (req: Request, res: Response): Promise<void> => {
+    console.log('[UserController] registerUser', req.body);
     try {
       const userData: UserInput = req.body;
-      const newUser = await userRepository.createUser(userData);
+      const newUser = await userRepository.registerUser(userData);
       res.status(201).json(newUser);
     } catch (error) {
       console.error("Erreur lors de la création d'un utilisateur:", error);

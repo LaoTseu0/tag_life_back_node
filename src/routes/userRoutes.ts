@@ -13,7 +13,10 @@ router.get('/', userController.getAllUsers as RequestHandler);
 router.get('/:id', userController.getUserById as RequestHandler);
 
 // POST créer un nouvel utilisateur
-router.post('/', userController.createUser as RequestHandler);
+router.post('/register', userController.registerUser as RequestHandler);
+
+// POST login
+router.post('/login', userController.login as RequestHandler);
 
 // PUT mettre à jour un utilisateur
 router.put('/:id', userController.updateUser as RequestHandler);
